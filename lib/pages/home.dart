@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_hub/pages/Booking_history/booking_history_page.dart';
 import 'package:health_hub/pages/Profile_page/profile_page.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_hub/pages/home_page/hoem_page.dart';
 import 'package:health_hub/pages/locaton_page/location_page.dart';
 import 'package:health_hub/pages/message_page/message_page.dart';
@@ -105,19 +105,16 @@ class _HomePageState extends State<HomePage>
                         controller: _tabController,
                         labelColor: Color(0xff1f8acc),
                         unselectedLabelColor: Colors.black,
-                        // indicatorColor: Color(0xfffc6111),
-
+                        indicatorColor: Colors.transparent, // Hide the tab indicator line
                         tabs: [
-                          Tab(icon: Icon(Icons.window)),
-                          Tab(icon: Icon(Icons.shopping_bag_outlined)),
+                          Tab(icon: Icon(FontAwesomeIcons.location)),
+                          Tab(icon: Icon(Icons.message_outlined)),
                           Container(
                             width: MediaQuery.of(context).size.width * 20,
                           ),
                           Tab(icon: Icon(Icons.person)),
-                          Tab(icon: Icon(Icons.list_alt_outlined)),
+                          Tab(icon: Icon(Icons.history)),
                         ],
-                        indicatorColor:
-                            Colors.transparent, // Hide the tab indicator line
                       ),
                     ),
                   ],
