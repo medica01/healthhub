@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../home page/home.dart';
+import '../../pages/home.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -129,7 +129,6 @@ class _PhoneEntryPageState extends State<PhoneEntryPage> {
                   Padding(
                     padding: EdgeInsets.only(left: 18.0, right: 18, top: 18),
                     child: Expanded(
-                      flex: 1,
                       child: TextFormField(
                         validator: (value){
                           if (value==null|| value.isEmpty){
