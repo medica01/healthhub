@@ -128,39 +128,37 @@ class _PhoneEntryPageState extends State<PhoneEntryPage> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 18.0, right: 18, top: 18),
-                    child: Expanded(
-                      child: TextFormField(
-                        validator: (value){
-                          if (value==null|| value.isEmpty){
-                            return "no phone number";
-                          }
-                          return null;
-                        },
-                        style: TextStyle(color: Color(0xff1f8acc)),
-                        cursorColor: Color(0xff1f8acc),
-                        maxLength: 10,
-                        maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                        controller: _phoneController,
+                    child: TextFormField(
+                      validator: (value){
+                        if (value==null|| value.isEmpty){
+                          return "no phone number";
+                        }
+                        return null;
+                      },
+                      style: TextStyle(color: Color(0xff1f8acc)),
+                      cursorColor: Color(0xff1f8acc),
+                      maxLength: 10,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      controller: _phoneController,
 
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        decoration: InputDecoration(
-                          focusColor: Color(0xff46c8bb),
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      decoration: InputDecoration(
+                        focusColor: Color(0xff46c8bb),
 
-                          contentPadding: EdgeInsets.only(left: 90),
-                          counterText: "",
-                          hintText: 'Enter Phone Number',
-                          hintStyle: TextStyle(color: Color(0xff1f8acc)),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(40),
-                              borderSide: BorderSide.merge(
-                                BorderSide(color: Color(0xff1f8acc)),
-                                BorderSide.none,
-                              )
+                        contentPadding: EdgeInsets.only(left: 90),
+                        counterText: "",
+                        hintText: 'Enter Phone Number',
+                        hintStyle: TextStyle(color: Color(0xff1f8acc)),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(40),
+                            borderSide: BorderSide.merge(
+                              BorderSide(color: Color(0xff1f8acc)),
+                              BorderSide.none,
+                            )
 
-                          ),
                         ),
-                        keyboardType: TextInputType.phone,
                       ),
+                      keyboardType: TextInputType.phone,
                     ),
                   ),
                   const SizedBox(height: 20),

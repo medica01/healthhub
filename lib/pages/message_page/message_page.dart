@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/rendering.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../allfun.dart';
+import 'package:http/http.dart' as http;
+
+
 
 class message_page extends StatefulWidget {
   const message_page({super.key});
@@ -8,6 +17,7 @@ class message_page extends StatefulWidget {
 }
 
 class _message_pageState extends State<message_page> {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
