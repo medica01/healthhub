@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/rendering.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:health_hub/pages/home_page/all_doctor_2.dart';
+import 'package:health_hub/pages/home_page/doctor_profile_3.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../allfun.dart';
 import 'package:http/http.dart' as http;
@@ -84,6 +87,7 @@ class home_page extends StatefulWidget {
 }
 
 class _home_pageState extends State<home_page> {
+  bool heart =false;
   List<doctor_details> doctor_detail = [];
   bool isLoading = true;
   String? errorMessage;
@@ -95,24 +99,24 @@ class _home_pageState extends State<home_page> {
     _showdoctor();
   }
 
+
+
   Future<void> _showdoctor() async {
     final url = Uri.parse(
-        "http://192.168.196.17:8000/doctor_details/doctor_addetails/");
+        "http://192.168.196.17:8000/doctor_details/doctor_editdetails/7/"); // Specific doctor's details
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
-        List<dynamic> jsonResponse = jsonDecode(response.body);
+        // Assuming the response is a single JSON object, not a list
+        Map<String, dynamic> jsonResponse = jsonDecode(response.body);
         setState(() {
-          doctor_detail = jsonResponse
-              .map((data) => doctor_details.fromJson(data))
-              .toList();
+          doctor_detail = [doctor_details.fromJson(jsonResponse)];
           isLoading = false;
         });
-        print(response.body); // To check the raw JSON response
-        print(doctor_detail); // To confirm the list is populated
+        print(jsonResponse); // Log raw JSON response
       } else {
         setState(() {
-          errorMessage = "failed to load doctor_details";
+          errorMessage = "Failed to load doctor details.";
           isLoading = false;
         });
       }
@@ -168,7 +172,8 @@ class _home_pageState extends State<home_page> {
             Padding(
               padding: EdgeInsets.only(left: 8.0),
               child: CircleAvatar(
-                radius: 26.0,
+                radius: 22.0,
+
                 backgroundImage: NetworkImage("$photourl"),
               ),
             ),
@@ -209,20 +214,21 @@ class _home_pageState extends State<home_page> {
               left: 10.0,
             ),
             child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Container(
-                width: 350,
-                child: textfield2(
-                    Color(0xfffdfdfd),
-                    Colors.grey,
-                    Color(0xff1f8acc),
-                    10,
-                    Offset(0, 8),
-                    BorderRadius.circular(30),
-                    EdgeInsets.all(10),
-                    "Search a Doctor"),
-              ),
-            ),
+                padding: EdgeInsets.all(8.0),
+                child: Container(
+                  width: 320,
+                  child: SearchBar(
+                    leading: Icon(Icons.search),
+                    hintText: 'Search',
+                    backgroundColor: WidgetStatePropertyAll(Colors.white),
+                    shadowColor: WidgetStatePropertyAll(Colors.grey),
+                    elevation: WidgetStatePropertyAll(6.0),
+                    shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40))),
+                    padding: WidgetStatePropertyAll(
+                        EdgeInsets.symmetric(horizontal: 16.0)),
+                  ),
+                )),
           ),
         ),
       ),
@@ -294,21 +300,29 @@ class _home_pageState extends State<home_page> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 text("All Doctors", Colors.black, 24, FontWeight.bold),
-                text("See All", Colors.grey, 20, FontWeight.bold),
+            GestureDetector(onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>all_doctor()));
+            },
+                child: text("See All", Colors.grey, 20, FontWeight.bold)),
               ],
             ),
           ),
           ListView.builder(
-            physics: BouncingScrollPhysics(),
+              physics: BouncingScrollPhysics(),
               shrinkWrap: true,
               itemCount: doctor_detail.length,
               itemBuilder: (context, index) {
                 var doctor = doctor_detail[index];
-                return doctor.doctorName != null
+                return doctor.id != null
                     ? Padding(
-                        padding: EdgeInsets.only(left: 15.0,right: 15,bottom: 15),
+                        padding:
+                            EdgeInsets.only(left: 15.0, right: 15, bottom: 15),
                         child: Container(
-                          color: Colors.blue.shade50,
+                          decoration: BoxDecoration(
+                            color: Colors.blue.shade50,
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+
                           height: 200,
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -322,19 +336,70 @@ class _home_pageState extends State<home_page> {
                                 fit: BoxFit.cover,
                               ),
                               Padding(
-                                padding:  EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      "Dr.${doctor.doctorName ?? "unknown"}",
-                                      style:
-                                          TextStyle(color: Colors.grey, fontSize: 20),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Dr.${doctor.doctorName ?? "unknown"}",
+                                          style: TextStyle(
+                                              color: Colors.black, fontSize: 20),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 48.0),
+                                          child: IconButton(onPressed: (){
+                                            setState(() {
+                                              heart=!heart;
+                                            });
+                                          }, icon: Icon(
+                                          heart
+                                          ? FontAwesomeIcons.solidHeart
+                                              : FontAwesomeIcons.heart,
+                                            color: heart
+                                                ? Colors.red
+                                                : Colors.grey,
+                                          ),),
+                                        ),
+                                      ],
                                     ),
-
+                                    Container(
+                                      width: 200,
+                                      child: Text(
+                                        doctor.bio ?? "No bio",
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 14,
+                                        ),
+                                        maxLines: 3, // Limit the text to 3 lines
+                                        overflow: TextOverflow.ellipsis, // Add "..." if the text exceeds maxLines
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        OutlinedButton(onPressed: (){
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>doc_profile(data: "${doctor.id}",)));
+                                        }, child: Text("Book")),
+                                        Padding(
+                                          padding:  EdgeInsets.only(left: 38.0),
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.star,color: Colors.yellow,),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 60,
+                                            child: Text("${doctor.regNo ?? 0}")),
+                                      ],
+                                    )
                                   ],
                                 ),
+
                               )
                             ],
                           ),
